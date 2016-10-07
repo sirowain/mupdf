@@ -3,8 +3,9 @@
 #import <Foundation/Foundation.h>
 
 @interface MuAnnotation : NSObject
--(instancetype) initFromAnnot:(fz_annot *)annot;
+-(instancetype) initFromAnnot:(fz_annot *)annot inDoc:(pdf_document*)doc;
 @property(readonly) int type;
 @property(readonly) CGRect rect;
-+(MuAnnotation *) annotFromAnnot:(fz_annot *)annot;
+@property(readonly) char* fieldName;
++(MuAnnotation *) annotFromAnnot:(fz_annot *)annot inDoc:(pdf_document*)doc;
 @end

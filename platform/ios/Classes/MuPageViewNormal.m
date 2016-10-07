@@ -45,11 +45,13 @@ static NSArray *enumerateWidgetRects(fz_document *doc, fz_page *page)
 
 static NSArray *enumerateAnnotations(fz_document *doc, fz_page *page)
 {
+	pdf_document *idoc = pdf_specifics(ctx, doc);
+	
 	fz_annot *annot;
 	NSMutableArray *arr = [NSMutableArray arrayWithCapacity:10];
 
 	for (annot = fz_first_annot(ctx, page); annot; annot = fz_next_annot(ctx, annot))
-		[arr addObject:[MuAnnotation annotFromAnnot:annot]];
+		[arr addObject:[MuAnnotation annotFromAnnot:annot inDoc:idoc]];
 
 	return [arr retain];
 }
