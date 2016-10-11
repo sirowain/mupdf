@@ -3,11 +3,12 @@
 @implementation MuAnnotation
 {
 	int type;
+	int widgetType;
 	CGRect rect;
 	char* fieldName;
 }
 
-@synthesize type, rect, fieldName;
+@synthesize type, widgetType, rect, fieldName;
 
 -(instancetype) initFromAnnot:(fz_annot *)annot inDoc:(pdf_document*)doc;
 {
@@ -16,6 +17,7 @@
 	{
 		fz_rect frect;
 		type = pdf_annot_type(ctx, (pdf_annot *)annot);
+		widgetType = pdf_widget_type(ctx, (pdf_widget *)annot);
 		fz_bound_annot(ctx, annot, &frect);
 		rect.origin.x = frect.x0;
 		rect.origin.y = frect.y0;
