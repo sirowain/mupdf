@@ -1353,7 +1353,7 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 	for (i = 0; i < annotations.count; i++)
 	{
 		MuAnnotation *annot = [annotations objectAtIndex:i];
-		if (annot.type != FZ_ANNOT_WIDGET && CGRectContainsPoint(annot.rect, ipt))
+		if (CGRectContainsPoint(annot.rect, ipt))
 		{
 			[self selectAnnotation:i];
 			return [[[MuTapResultAnnotation alloc] initWithAnnotation:annot] autorelease];
