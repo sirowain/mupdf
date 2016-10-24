@@ -607,6 +607,7 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 	BOOL cancel;
 	id<MuDialogCreator> dialogCreator;
 	id<MuUpdater> updater;
+	BOOL alreadyDrawnSignatureHighlight;
 }
 
 - (void) ensurePageLoaded
@@ -932,6 +933,11 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self displayImage: image];
 				[image release];
+				
+				if (!alreadyDrawnSignatureHighlight && self.highlightSignature) {
+					alreadyDrawnSignatureHighlight = YES;
+					[self drawSignaturesHighlight];
+				}
 			});
 		} else {
 			printf("cancel page %d\n", number);
@@ -1051,6 +1057,30 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 
 		if (annotSelectView)
 			[annotSelectView setFrame:frm];
+		
+		// signature highlight
+		for (UIView *view in self.subviews) {
+			if ([view isKindOfClass:[MuAnnotSelectView class]] && view.tag == 99) {
+				[view setFrame:frm];
+			}
+		}
+	}
+}
+
+// signature highlight
+- (void)drawSignaturesHighlight
+{
+	int i;
+	for (i = 0; i < annotations.count; i++)
+	{
+		MuAnnotation *annot = [annotations objectAtIndex:i];
+		if (annot.widgetType == PDF_WIDGET_TYPE_SIGNATURE) {
+			MuAnnotSelectView *selectView = [[MuAnnotSelectView alloc] initWithAnnot:annot pageSize:pageSize];
+			selectView.tag = 99;
+			
+			[self addSubview:selectView];
+			[self bringSubviewToFront:selectView];
+		}
 	}
 }
 
@@ -1119,6 +1149,13 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 					[self bringSubviewToFront:inkView];
 				if (annotSelectView)
 					[self bringSubviewToFront:annotSelectView];
+				
+				// signature highlight
+				for (UIView *view in self.subviews) {
+					if ([view isKindOfClass:[MuAnnotSelectView class]] && view.tag == 99) {
+						[self bringSubviewToFront:view];
+					}
+				}
 			} else {
 				printf("discard tile\n");
 			}

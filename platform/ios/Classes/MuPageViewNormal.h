@@ -21,4 +21,7 @@
 - (void) resizeImage;
 - (void) loadPage;
 - (void) loadTile;
+
+@property (nonatomic) BOOL highlightSignature;
+
 @end
