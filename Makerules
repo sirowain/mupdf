@@ -195,6 +195,9 @@ AR = xcrun ar
 LD = xcrun ld
 RANLIB_CMD = xcrun ranlib $@
 CROSSCOMPILE=yes
+HAVE_X11 ?= no
+HAVE_GLFW ?= no
+HAVE_MUJS ?= no
 endif
 
 ifeq "$(OS)" "tizen-arm"
