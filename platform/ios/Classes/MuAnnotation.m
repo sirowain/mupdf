@@ -5,10 +5,11 @@
 	int type;
 	int widgetType;
 	char *fieldName;
+	int fieldFlags;
 	CGRect rect;
 }
 
-@synthesize type, widgetType, fieldName, rect;
+@synthesize type, widgetType, fieldName, fieldFlags, rect;
 
 -(id) initFromAnnot:(fz_annot *)annot;
 {
@@ -27,6 +28,9 @@
 		// fieldname
 		pdf_document *doc = pdf_get_indirect_document(ctx, ((pdf_annot*)annot)->obj);
 		fieldName = pdf_field_name(ctx, doc, ((pdf_annot*)annot)->obj);
+		
+		// flags
+		fieldFlags = pdf_get_field_flags(ctx, doc, ((pdf_annot*)annot)->obj);
 	}
 	return self;
 }
@@ -35,4 +39,15 @@
 {
 	return [[[MuAnnotation alloc] initFromAnnot:annot] autorelease];
 }
+
+- (BOOL)isReadOnly
+{
+	return (fieldFlags & Ff_ReadOnly);
+}
+
+- (BOOL)isRequired
+{
+	return (fieldFlags & Ff_Required);
+}
+
 @end
