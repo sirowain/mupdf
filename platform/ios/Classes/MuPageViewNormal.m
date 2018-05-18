@@ -691,8 +691,8 @@ static void updatePixmap(fz_document *doc, fz_display_list *page_list, fz_displa
 		__block CGDataProviderRef block_tileData = tileData;
 		__block CGDataProviderRef block_imageData = imageData;
 		dispatch_async(queue, ^{
-			if (block_page_list)
-				fz_drop_display_list(ctx, block_page_list);
+//			if (block_page_list)
+//				fz_drop_display_list(ctx, block_page_list);
 			if (block_annot_list)
 				fz_drop_display_list(ctx, block_annot_list);
 			if (block_page)
